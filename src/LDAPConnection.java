@@ -13,109 +13,109 @@ import javax.naming.ldap.InitialLdapContext;
 import javax.naming.ldap.LdapContext;
 
 public class LDAPConnection {
-	private String connectionName = "";
+    private String connectionName = "";
 
-	private LdapContext ctx = null;
-	static Control[] initcontrols;
+    private LdapContext ctx = null;
+    static Control[] initcontrols;
 
-	public LDAPConnection(String url, String username, String password,
-			String authenSchema) {
-		this(url, username, password, authenSchema, false);
-	}
+    public LDAPConnection(String url, String username, String password,
+            String authenSchema) {
+        this(url, username, password, authenSchema, false);
+    }
 
-	public LDAPConnection(String url, String username, String password,
-			String authenSchema, boolean isSSL, int ldapType) {
-		Hashtable<String, String> env = new Hashtable<String, String>();
-		env.put("java.naming.factory.initial",
-				"com.sun.jndi.ldap.LdapCtxFactory");
+    public LDAPConnection(String url, String username, String password,
+            String authenSchema, boolean isSSL, int ldapType) {
+        Hashtable<String, String> env = new Hashtable<String, String>();
+        env.put("java.naming.factory.initial",
+                "com.sun.jndi.ldap.LdapCtxFactory");
 
-		env.put("java.naming.security.authentication", authenSchema);
-		env.put("java.naming.provider.url", url);
-		env.put("java.naming.security.principal", username);
-		env.put("java.naming.security.credentials", password);
-		env.put("com.sun.jndi.ldap.connect.pool", "true");
+        env.put("java.naming.security.authentication", authenSchema);
+        env.put("java.naming.provider.url", url);
+        env.put("java.naming.security.principal", username);
+        env.put("java.naming.security.credentials", password);
+        env.put("com.sun.jndi.ldap.connect.pool", "true");
 
-		env.put("com.sun.jndi.ldap.connect.pool.timeout", "300000");
-		env.put("com.sun.jndi.ldap.connect.pool.prefsize", "50");
-		env.put("com.sun.jndi.ldap.connect.pool.maxsize", "90");
-		env.put("java.naming.referral", "follow");
-		if (isSSL) {
-			env.put("java.naming.security.protocol", "ssl");
-			switch (ldapType) {
-			case 1:
-				String jrePath = System.getProperty("java.home");
-				String keystore = "";
-				if (jrePath.indexOf("\\") != -1)
-					keystore = jrePath + "\\lib\\security\\cacerts";
-				else {
-					keystore = jrePath + "/lib/security/cacerts";
-				}
-				System.setProperty("javax.net.ssl.trustStore", keystore);
-				break;
-			default:
-				env.put("java.naming.ldap.factory.socket",
-						"cn.com.chinautrust.idm.connector.ldap.ssl.AdvancedSocketFactory");
-			}
+        env.put("com.sun.jndi.ldap.connect.pool.timeout", "300000");
+        env.put("com.sun.jndi.ldap.connect.pool.prefsize", "50");
+        env.put("com.sun.jndi.ldap.connect.pool.maxsize", "90");
+        env.put("java.naming.referral", "follow");
+        if (isSSL) {
+            env.put("java.naming.security.protocol", "ssl");
+            switch (ldapType) {
+            case 1:
+                String jrePath = System.getProperty("java.home");
+                String keystore = "";
+                if (jrePath.indexOf("\\") != -1)
+                    keystore = jrePath + "\\lib\\security\\cacerts";
+                else {
+                    keystore = jrePath + "/lib/security/cacerts";
+                }
+                System.setProperty("javax.net.ssl.trustStore", keystore);
+                break;
+            default:
+                env.put("java.naming.ldap.factory.socket",
+                        "cn.com.chinautrust.idm.connector.ldap.ssl.AdvancedSocketFactory");
+            }
 
-		}
+        }
 
-		try {
-			this.ctx = new InitialLdapContext(env, null);
-			env = null;
-			if (initcontrols == null)
-				initcontrols = this.ctx.getRequestControls();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            this.ctx = new InitialLdapContext(env, null);
+            env = null;
+            if (initcontrols == null)
+                initcontrols = this.ctx.getRequestControls();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	public LDAPConnection(String url, String username, String password,
-			String authenSchema, boolean isSSL) {
-		this(url, username, password, authenSchema, false, 2);
-	}
+    public LDAPConnection(String url, String username, String password,
+            String authenSchema, boolean isSSL) {
+        this(url, username, password, authenSchema, false, 2);
+    }
 
-	public void close() {
-		if (this.ctx != null)
-			try {
-				this.ctx.close();
-				this.ctx = null;
-			} catch (NamingException e) {
-				try {
-					this.ctx.close();
-				} catch (NamingException ex) {
-					ex.printStackTrace();
-				}
-				e.printStackTrace();
-			}
-	}
+    public void close() {
+        if (this.ctx != null)
+            try {
+                this.ctx.close();
+                this.ctx = null;
+            } catch (NamingException e) {
+                try {
+                    this.ctx.close();
+                } catch (NamingException ex) {
+                    ex.printStackTrace();
+                }
+                e.printStackTrace();
+            }
+    }
 
-	public void reset() {
-		try {
-			this.ctx.setRequestControls(initcontrols);
-		} catch (NamingException ex) {
-			ex.printStackTrace();
-		}
-	}
+    public void reset() {
+        try {
+            this.ctx.setRequestControls(initcontrols);
+        } catch (NamingException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-	public LdapContext getLdapContext() {
-		return this.ctx;
-	}
+    public LdapContext getLdapContext() {
+        return this.ctx;
+    }
 
-	public void setLdapContext(LdapContext ctx) {
-		this.ctx = ctx;
-	}
+    public void setLdapContext(LdapContext ctx) {
+        this.ctx = ctx;
+    }
 
-	public String getConnectionName() {
-		return this.connectionName;
-	}
+    public String getConnectionName() {
+        return this.connectionName;
+    }
 
-	public void setConnectionName(String connectionName) {
-		this.connectionName = connectionName;
-	}
-	
-	public static void main(String[] args){
+    public void setConnectionName(String connectionName) {
+        this.connectionName = connectionName;
+    }
+    
+    public static void main(String[] args){
 
         LdapContext ctx = null;
         LDAPConnection conn = null;
@@ -135,14 +135,14 @@ public class LDAPConnection {
             String searchBase = "ou=Groups,dc=simp,dc=com";
 
             String rs[] = {
-            		"cn",
-            		"name",
-            		"simp-asset-type",
-            		"simp-asset-ip",
-            		"simp-asset-connector-ip",
-            		"simp-asset-connector-os-port",
-            		"simp-asset-connector-os-manager",
-            		"simp-asset-connector-os-manager-pwd" 
+                    "cn",
+                    "name",
+                    "simp-asset-type",
+                    "simp-asset-ip",
+                    "simp-asset-connector-ip",
+                    "simp-asset-connector-os-port",
+                    "simp-asset-connector-os-manager",
+                    "simp-asset-connector-os-manager-pwd" 
             };
             sc.setReturningAttributes(rs);
             NamingEnumeration<SearchResult> anser = ctx.search(searchBase, searchFilter, sc);
@@ -160,13 +160,13 @@ public class LDAPConnection {
         } catch (Exception e) {
             e.printStackTrace();
         }finally{
-        	try{
-        	    ctx.close();
-        	}catch(Exception ee){
-        		ee.printStackTrace();
-        	}
+            try{
+                ctx.close();
+            }catch(Exception ee){
+                ee.printStackTrace();
+            }
         }
-	}
-	
-	
+    }
+    
+    
 }
