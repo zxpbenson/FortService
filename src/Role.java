@@ -14,10 +14,10 @@ import javax.naming.ldap.LdapContext;
  * 前提:堡垒的限制逻辑保障用户是否能维护和登录该设备账号
  * accountLimited的语义定义为:列举改用户对该设备可维护的账号(授权登录的账号才可以维护)
  * 判定某个人对某个设备是否有限制角色范围内的授权账号，无非分下面四种情况
- * 1,没有限制角色 => 返回1
- * 2,有限制角色但是目标设备不在限制角色范围内 => 返回2
- * 3,有限制角色且目标设备也在限制角色范围内但是无相应授权账号 => 返回3
- * 4,有限制角色且目标设备也在限制角色范围内而且还有相应授权账号 => 返回授权账号(逗号分隔)
+ * 1,没有限制角色 => 返回1(页面不限制编辑账号)
+ * 2,有限制角色但是目标设备不在限制角色范围内 => 返回2(页面不限制编辑账号)
+ * 3,有限制角色且目标设备也在限制角色范围内但是无相应授权账号 => 返回3(页面限制编辑账号)
+ * 4,有限制角色且目标设备也在限制角色范围内而且还有相应授权账号 => 返回授权账号(逗号分隔)(页面限制编辑无授权账号)
  */
 
 public class Role {
@@ -43,6 +43,7 @@ public class Role {
     }
     
     public static String accountLimited(String personCn, String assetCn, boolean fortEnv){
+        if("admin".equals(personCn))return "SUCCESS:0";
         LDAPConnection conn = LDAPEnv.getLDAPConnection(fortEnv);
         try{
             List<String> pseronCnInNameSpaceList = new ArrayList<String>();
@@ -91,8 +92,9 @@ public class Role {
         		String account = underControlAuthorization.substring(underControlAuthorization.indexOf("=")+1, underControlAuthorization.indexOf(","));
         		sb.append(",");
         		sb.append(account);
+                sb.append(",");
         	}
-        	return sb.toString().replaceAll(":,", ":");
+        	return sb.toString();
         }catch(Exception e){
             e.printStackTrace();
             return "FAIL:X";

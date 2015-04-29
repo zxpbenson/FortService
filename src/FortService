@@ -13,6 +13,9 @@ elif [ "Authorization" = $1 ]; then
 elif [ "Role" = $1 ]; then
  #echo Asset $2 $3 $4
  java -cp /usr/local/fort_append/FortService/catch_pwd.jar:/usr/local/fort_append/FortService/FortService.jar Role $2 $3 $4
+elif [ "Cmd" = $1 ]; then
+ #echo Asset $2 $3 $4
+ java -cp /usr/local/fort_append/FortService/catch_pwd.jar:/usr/local/fort_append/FortService/FortService.jar Cmd $2
 else
  echo "illegal parameter"
 fi

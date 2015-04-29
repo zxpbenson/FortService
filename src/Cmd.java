@@ -12,6 +12,22 @@ import java.util.TimerTask;
 
 public class Cmd{
 
+    public static void main(String[] args){
+        Cmd cmd = new Cmd();
+        
+        //一个命令 配合一个exit能让进程执行完上一个命令后立即结束，不用等待Time超时。
+        List[] echoListArr = cmd.execCmdsInProcess(new String[]{"/bin/sh"}, null, null, new String[]{"FortService Role zhangke Asset_0031B20A8 " + (args.length > 0 ? args[0] : ""), "exit"}, 1);
+        //List[] echoListArr = cmd.execCmdsInProcess(new String[]{"cmd"}, null, null, new String[]{"ping baidu.com", "exit"}, 1);
+        System.out.println("echo begin : ---------------------");
+        for(Object echo : echoListArr[0]){
+            System.out.println(echo);
+        }
+        System.out.println("err_echo begin : ---------------------");
+        for(Object echo : echoListArr[1]){
+            System.out.println(echo);
+        }
+    }
+    
     /*
      * 返回结果为一个长度为2的数组 List[0]是常规回显 List[1]是错误回显
      * programAndArguments:在windows上执行为cmd linux上为 /bin/sh
@@ -20,7 +36,7 @@ public class Cmd{
      * String:命令数组
      * timeout:超时时间 单位为分钟
      */
-    public static List[] execCmdsInProcess(String[] programAndArguments,Map<String,String> ev, String dir, String[] cmds,int timeout){
+    public List[] execCmdsInProcess(String[] programAndArguments,Map<String,String> ev, String dir, String[] cmds,int timeout){
         Process proc = null;
         OutputStream os = null;
         InputStream is = null;
@@ -62,8 +78,9 @@ public class Cmd{
                 os.write((cmd + "\n").getBytes());
                 os.flush();
             }
-            
+            System.out.println("cmd execute begin wait------");
             proc.waitFor();
+            System.out.println("cmd execute end------");
             timer.cancel();//退出进程保护任务
             proc.destroy();
             System.out.println("Cmd process end.");
@@ -76,22 +93,22 @@ public class Cmd{
                 if(os != null){
                     os.close();
                 }
-            }catch(Exception e){}
+            }catch(Exception e){e.printStackTrace();}
             try{
                 if(is != null){
                     is.close();
                 }
-            }catch(Exception e){}
+            }catch(Exception e){e.printStackTrace();}
             try{
                 if(eis != null){
                     eis.close();
                 }
-            }catch(Exception e){}
+            }catch(Exception e){e.printStackTrace();}
             try{
                 if(proc != null){
                     proc.destroy();
                 }
-            }catch(Exception e){}
+            }catch(Exception e){e.printStackTrace();}
         }
         
         List[] result = new List[]{echoList, errEchoList};
@@ -142,10 +159,10 @@ class EchoProcessThread extends Thread{
         }finally{
             try{
                 br.close();
-            }catch(Exception e){}
+            }catch(Exception e){e.printStackTrace();}
             try{
                 isr.close();
-            }catch(Exception e){}
+            }catch(Exception e){e.printStackTrace();}
         }
         System.out.println("Sub thread("+this.info+")end.");
     }
