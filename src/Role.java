@@ -23,13 +23,13 @@ import javax.naming.ldap.LdapContext;
 public class Role {
     
     public static void main(String[] args){
-        System.out.println(accountLimited("zhangke","Asset_002A5D869 "));
-//        if(args.length == 3){
-//            System.out.println(accountLimited(args[0],args[1],Boolean.parseBoolean(args[2])));
-//        }
-//        if(args.length == 2){
-//            System.out.println(accountLimited(args[0],args[1]));
-//        }
+        //System.out.println(accountLimited("zhangke","Asset_0031B20A8 "));
+        if(args.length == 3){
+            System.out.println(accountLimited(args[0],args[1],Boolean.parseBoolean(args[2])));
+        }
+        if(args.length == 2){
+            System.out.println(accountLimited(args[0],args[1]));
+        }
     }
     
     public static String accountLimited(String personCn, String assetCn){
@@ -64,7 +64,7 @@ public class Role {
         	
         	boolean underRoleControl = false;
         	for(String roleCnInNamespace : roleList){
-        	    System.out.println(roleCnInNamespace);
+        	    //System.out.println(roleCnInNamespace);
         	    underRoleControl = underRoleControl(roleCnInNamespace, assetCnInNamespace);
         	    if(underRoleControl)break;
         	}
@@ -74,15 +74,31 @@ public class Role {
         	}
         	
         	List<String> authorizationList = getAuthorization(conn, pseronCnInNameSpace);
+        	List<String> underControlAuthorizationList = new ArrayList<String>();
+        	for(String authorization : authorizationList){
+        		if(underRoleControl(assetCnInNamespace, authorization)){
+        			underControlAuthorizationList.add(authorization);
+        		}
+        	}
         	
+        	if(underControlAuthorizationList.size() < 1){
+        		return "SUCCESS:3";
+        	}
         	
+        	StringBuffer sb = new StringBuffer();
+        	sb.append("SUCCESS:");
+        	for(String underControlAuthorization : underControlAuthorizationList){
+        		String account = underControlAuthorization.substring(underControlAuthorization.indexOf("=")+1, underControlAuthorization.indexOf(","));
+        		sb.append(",");
+        		sb.append(account);
+        	}
+        	return sb.toString().replaceAll(":,", ":");
         }catch(Exception e){
             e.printStackTrace();
             return "FAIL:X";
         }finally{
             conn.close();
         }
-        return "root,support";
     }
     
     private static List<String> searchRoleLimited(LDAPConnection conn, String personCn, List<String> pseronCnInNameSpaceList){
@@ -116,9 +132,9 @@ public class Role {
                             String roleCnInNamespace = roleObj.toString();
                             //System.out.println(roleObj.toString());
                             //list.add(nameInNamespace);
-                            String roleName = getRoleName(conn, roleCnInNamespace);
-                            if(roleName != null && roleName.endsWith("@LIMITED")){
-                                list.add(roleCnInNamespace);
+                            String roleNameAndCnInNamespace[] = getRoleNameAndCnInNamespace(conn, roleCnInNamespace);
+                            if(roleNameAndCnInNamespace[0] != null && roleNameAndCnInNamespace[0].endsWith("@LIMITED")){
+                                list.add(roleNameAndCnInNamespace[1]);
                             }
                         }
                     }
@@ -133,7 +149,7 @@ public class Role {
         return list;
     }
     
-    private static String getRoleName(LDAPConnection conn, String roleCn){
+    private static String[] getRoleNameAndCnInNamespace(LDAPConnection conn, String roleCn){
         
         LdapContext ctx = conn.getLdapContext();
         //System.out.println("ctx=" + ctx);
@@ -151,13 +167,14 @@ public class Role {
             NamingEnumeration<SearchResult> anser = ctx.search(searchBase, searchFilter, sc);
             if(anser.hasMoreElements()){
                 SearchResult sr = anser.next();
+                String cnInNamespace = sr.getNameInNamespace();
                 Attributes attrs = sr.getAttributes();
                 //System.out.println("getNameInNamespace()="+sr.getNameInNamespace());//like : cn=Role_132645461724583,cn=Group_131607006073081,ou=Groups, dc=simp,dc=com
                 Attribute roleAttribute = attrs.get("name");
                 if(roleAttribute != null){
                     Object roleObj = roleAttribute.get();
                     if(roleObj != null) {
-                        return roleObj.toString();
+                        return new String[]{roleObj.toString(), cnInNamespace};
                     }
                 }
             }
@@ -242,7 +259,10 @@ public class Role {
                     Object obj = attribute.get();
                     if(obj != null){
                         String cnInNamespace = obj.toString();
-                        System.out.println(cnInNamespace);
+                        if(!cnInNamespace.endsWith(",ou=Groups,dc=simp,dc=com")){
+                        	cnInNamespace = cnInNamespace + ",ou=Groups,dc=simp,dc=com";
+                        }
+                        //System.out.println(cnInNamespace);
                         list.add(cnInNamespace);
                     }
                 }
