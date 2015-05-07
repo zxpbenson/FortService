@@ -23,7 +23,7 @@ import javax.naming.ldap.LdapContext;
 public class Role {
     
     public static void main(String[] args){
-        //System.out.println(accountLimited("zhangke","Asset_0031B20A8 "));
+        //System.out.println(accountLimited("zhangke","Asset_005F9E00F"));
         if(args.length == 3){
             System.out.println(accountLimited(args[0],args[1],Boolean.parseBoolean(args[2])));
         }
@@ -77,7 +77,7 @@ public class Role {
         	List<String> authorizationList = getAuthorization(conn, pseronCnInNameSpace);
         	List<String> underControlAuthorizationList = new ArrayList<String>();
         	for(String authorization : authorizationList){
-        		if(underRoleControl(assetCnInNamespace, authorization)){
+        		if(underAsset(assetCnInNamespace, authorization)){
         			underControlAuthorizationList.add(authorization);
         		}
         	}
@@ -234,6 +234,18 @@ public class Role {
         if(assetCnInNamespace.endsWith(scope))return true;
         
         return false;
+    }
+
+    private static boolean underAsset(String assetCnInNamespace, String accountCnInNamespace) throws Exception{
+        
+        if(assetCnInNamespace == null)throw new Exception("illegal assetCnInNamespace:" + assetCnInNamespace);
+        if(accountCnInNamespace == null)throw new Exception("illegal accountCnInNamespace:" + accountCnInNamespace);
+        
+        assetCnInNamespace = assetCnInNamespace.replaceAll(" ", "");
+        accountCnInNamespace = accountCnInNamespace.replaceAll(" ", "");
+        
+        return accountCnInNamespace.endsWith(assetCnInNamespace);
+        
     }
     
     private static List<String> getAuthorization(LDAPConnection conn, String personCnInNamespace){
