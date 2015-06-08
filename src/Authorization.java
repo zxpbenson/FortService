@@ -13,6 +13,7 @@ public class Authorization {
         //System.out.println(authorizeValidate("zhangke","Asset_1351712111964296","support"));
         //System.out.println(authorizeValidate("zhangke","Asset_002A5D869","root"));
         //System.out.println(getAssetCnAndAccountByAuthorizationCn("zhangke","13165170732686"));
+        //System.out.println(getAssetCnAndAccountByAuthorizationCn("zhangke","00521B692"));
         
         if(args.length == 6){
             System.out.println(getAssetCnAndAccountByAuthorizationCn(args[1],args[2],Boolean.parseBoolean(args[3])));
@@ -62,7 +63,7 @@ public class Authorization {
             SearchControls sc = new SearchControls();
             sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
             
-            String searchFilter = "(&(objectclass=simp-authorization)(cn=authorize_"+ authorizationCn +"))";
+            String searchFilter = "(objectclass=simp-authorization)";
             String searchBase = "cn="+personCn+",ou=People,dc=simp,dc=com";
             
             String rs[] = {
@@ -73,18 +74,31 @@ public class Authorization {
             
             sc.setReturningAttributes(rs);
             NamingEnumeration<SearchResult> anser = ctx.search(searchBase, searchFilter, sc);
-            if(anser.hasMoreElements()){
+            
+            //for example : zhangke -> $00521B692$1351713120505256$
+            String authorizationCn1 = "authorize_" + authorizationCn;
+            String authorizationCn2 = "auth_" + authorizationCn;
+            
+            while(anser.hasMoreElements()){
                 SearchResult sr = anser.next();
-                   Attributes attrs = sr.getAttributes();
-                Attribute authorize = attrs.get("simp-authorize-account-rdn");
-                if(authorize != null){
-                    Object objectAuthorize = authorize.get();
-                    if(objectAuthorize != null){
-                        return objectAuthorize.toString();
+                Attributes attrs = sr.getAttributes();
+                Attribute cn = attrs.get("cn");
+                if(cn != null){
+                    Object objectCn = cn.get();
+                    if(objectCn != null){
+                        String cnStr = objectCn.toString();
+                        if(authorizationCn1.equals(cnStr) || authorizationCn2.equals(cnStr)){
+                        	Attribute authorize = attrs.get("simp-authorize-account-rdn");
+                        	if(authorize != null){
+                        		Object objectAuthorize = authorize.get();
+                        		if(objectAuthorize != null){
+                        			return objectAuthorize.toString();
+                        		}
+                        	}
+                        }
                     }
                 }
             }
-            
         } catch (Exception e) {
             e.printStackTrace();
         }

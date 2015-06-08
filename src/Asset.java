@@ -13,6 +13,7 @@ public class Asset {
         //System.out.println(getAccountPassword("Asset_002E97B0C","$user"));
         //System.out.println(getAccountPassword("Asset_1316159995894567","root"));
         //System.out.println(getAccountPassword("Asset_1316159996475177","root"));
+        //System.out.println(getAccountPassword("Asset_1351712111964296","rtbridge"));
         if(args.length == 3){
             System.out.println(getAccountPassword(args[0],args[1],Boolean.parseBoolean(args[2])));
         }
