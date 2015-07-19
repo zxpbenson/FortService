@@ -1,19 +1,17 @@
 #!/bin/sh
-#java -cp /usr/local/fort_append/FortService/catch_pwd.jar:/usr/local/fort_append/FortService/FortService.jar Asset $1 $2 $3
-#pause
-if [ "Person" = $1 ]; then
+if [ "Person" = "$1" ]; then
  #echo Person $2 $3 $4
  java -cp /usr/local/fort_append/FortService/catch_pwd.jar:/usr/local/fort_append/FortService/FortService.jar Person $2 $3 $4
-elif [ "Asset" = $1 ]; then
+elif [ "Asset" = "$1" ]; then
  #echo Asset $2 $3 $4
  java -cp /usr/local/fort_append/FortService/catch_pwd.jar:/usr/local/fort_append/FortService/FortService.jar Asset $2 $3 $4
-elif [ "Authorization" = $1 ]; then
+elif [ "Authorization" = "$1" ]; then
  #echo Asset $2 $3 $4
  java -cp /usr/local/fort_append/FortService/catch_pwd.jar:/usr/local/fort_append/FortService/FortService.jar Authorization $2 $3 $4 $5 $6 $7
-elif [ "Role" = $1 ]; then
+elif [ "Role" = "$1" ]; then
  #echo Asset $2 $3 $4
  java -cp /usr/local/fort_append/FortService/catch_pwd.jar:/usr/local/fort_append/FortService/FortService.jar Role $2 $3 $4
-elif [ "Cmd" = $1 ]; then
+elif [ "Cmd" = "$1" ]; then
  #echo Asset $2 $3 $4
  java -cp /usr/local/fort_append/FortService/catch_pwd.jar:/usr/local/fort_append/FortService/FortService.jar Cmd $2
 else

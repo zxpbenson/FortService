@@ -10,7 +10,7 @@ public class FortAppendDecryption {
         // TODO Auto-generated method stub
         //com.crypto.PWDTEXT.main(new String[]{"B5348BEE4161DD81"});
         //System.out.println(decrypPwdForAssetAccount("E33AAAAC193AACF08A2AEA786B562145"));
-        //System.out.println(decrypPwdForAssetAccount("BB861761BC433224"));
+        //System.out.println(decrypPwdForAssetAccount("B14C32DB7FEF21298A2AEA786B562145"));
         
     }
     

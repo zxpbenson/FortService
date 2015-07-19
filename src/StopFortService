@@ -1,0 +1,10 @@
+#!/bin/sh
+
+FortServiceSocketApiPID=`ps -ef | grep FortServiceSocketApi | grep java | awk '{print $2}'`
+
+if [ -z $FortServiceSocketApiPID ] ; then
+  echo "FortServiceSocketApi process not exists."
+else
+  kill $FortServiceSocketApiPID
+  echo "FortServiceSocketApi process stop successfully."
+fi
