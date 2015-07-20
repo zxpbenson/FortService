@@ -1,5 +1,5 @@
 #!/bin/sh
-CLASSPATH=`find /usr/local/fort_append/FortService -name *.jar | xargs | sed "s/ /:/g"`
+CLASSPATH=`find /usr/local/fort_append/FortService -name "*.jar" | xargs | sed "s/ /:/g"`
 export CLASSPATH=.:$CLASSPATH
 export LANG="en_US.UTF-8"
 
