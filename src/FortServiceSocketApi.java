@@ -160,7 +160,8 @@ class FortServiceApiWorker implements Runnable{
 //    }
     
     private void response(String response) throws IOException{
-        bw.write(response + "\n");
+        bw.write(response);
+        bw.newLine();
         bw.flush();
     }
     

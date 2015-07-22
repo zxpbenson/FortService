@@ -137,7 +137,8 @@ class FortServiceApiTestWorker implements Runnable{
     }
 
     private void request(String request) throws IOException{
-        bw.write(request + "\n");
+        bw.write(request);
+        bw.newLine();
         bw.flush();
     }
 
