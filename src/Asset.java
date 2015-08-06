@@ -9,7 +9,7 @@ import javax.naming.ldap.LdapContext;
 public class Asset {
     
     public static void main(String[] args){
-        //System.out.println(getAccountPassword("Asset_003B3A9AA","rtbridge"));
+        //System.out.println(getAccountPassword("Asset_0058B6BA0","rtbridge"));
         //System.out.println(getAccountPassword("Asset_002E97B0C","$user"));
         //System.out.println(getAccountPassword("Asset_1316159995894567","root"));
         //System.out.println(getAccountPassword("Asset_1316159996475177","root"));
@@ -73,7 +73,7 @@ public class Asset {
                     Object objectAssetType = attributeAssetType.get();
                     if(objectAssetType != null){
                         String assetType = objectAssetType.toString();
-                        if("linux".equals(assetType)||"unix".equals(assetType)||"aix".equals(assetType)){
+                        if(assetTypeMatch(assetType)){
                             String ip =  attrs.get("simp-asset-connector-ip").get().toString();
                             String port =  attrs.get("simp-asset-connector-os-port").get().toString();
                             return new String[]{ip, port, sr.getNameInNamespace()};
@@ -87,6 +87,14 @@ public class Asset {
         }
         
         return null;
+    }
+    
+    private static boolean assetTypeMatch(String assetType){
+        if("linux".equalsIgnoreCase(assetType))return true;
+        if("unix".equalsIgnoreCase(assetType))return true;
+        if("aix".equalsIgnoreCase(assetType))return true;
+        if("solaris".equalsIgnoreCase(assetType))return true;
+        return false;
     }
     
     private static String getAssetPasswordInSecurityText(LDAPConnection conn, String assetBaseDn, String assetAccount){
