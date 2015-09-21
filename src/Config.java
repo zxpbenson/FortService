@@ -12,7 +12,7 @@ public class Config {
         try{
             String filePath = "D://FortService//resources//itil.control.cnf";
             if(fortEnv){
-                filePath = "/usr/local/fort_append/conf/itil.control.cnf    ";
+                filePath = "/usr/local/fort_append/conf/itil.control.cnf";
             }
             fis = new FileInputStream(filePath); 
             prop.load(fis);
