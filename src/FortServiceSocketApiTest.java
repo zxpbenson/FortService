@@ -24,24 +24,28 @@ public class FortServiceSocketApiTest {
     }
     
     public FortServiceSocketApiTest(){
-        this(5, "192.168.10.129", 9777);
+        this(5, "127.0.0.1", 9777);
     }
     
     public void startTest(int limit, String bArg){
         String[] cmds = new String[]{
-                "Asset Asset_002A5D869 root " + bArg,
-                "Person zhangke 123 " + bArg,
-                "Authorization zhangke Asset_1351712111964296 support " + bArg,
-                "Authorization get zhangke 13165170732686 - - " + bArg,
-                "Role zhangke Asset_0031B20A8 " + bArg,
-                "Cmd " + bArg,
-                ""
+                //"Asset Asset_002A5D869 root " + bArg,
+                //"Person zhangke 123 " + bArg,
+                //"Authorization zhangke Asset_1351712111964296 support " + bArg,
+                //"Authorization get zhangke 13165170732686 - - " + bArg,
+                //"Role zhangke Asset_0031B20A8 " + bArg,
+                //"Cmd " + bArg,
+                //"{\"personAccount\":\"zhangke\",\"operation\":\"readAuthorization\",\"fortEnv\":\"false\"}",
+                "{\"personAccount\":\"zhangke\",\"operation\":\"getItilAuthorization\",\"fortEnv\":\"false\"}",
+                "Config white_list false",
+                "Config itil_filter false"
+                //""
         };
         
         int cmdCounter = 0;
         while(true){
             if(cmdCounter > limit)break;
-            FortServiceApiTestWorker worker = new FortServiceApiTestWorker(ip, port, cmds[cmdCounter++ % 7]);
+            FortServiceApiTestWorker worker = new FortServiceApiTestWorker(ip, port, cmds[cmdCounter++ % cmds.length]);
             executor.execute(worker);
         }
         

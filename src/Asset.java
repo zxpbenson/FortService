@@ -44,7 +44,7 @@ public class Asset {
         return null;
     }
     
-    private static String[] getAssetBaseDnAndIpPort(LDAPConnection conn, String assetCn){
+    public static String[] getAssetBaseDnAndIpPort(LDAPConnection conn, String assetCn){
         try {
             LdapContext ctx = conn.getLdapContext();
             SearchControls sc = new SearchControls();

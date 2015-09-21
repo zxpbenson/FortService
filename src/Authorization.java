@@ -107,12 +107,12 @@ public class Authorization {
     }
     
     public static boolean authorizeValidate(String personCn, String assetCn, String accountCn, boolean fortEnv){
-        LDAPConnection conn = null;
-        if(fortEnv){
-            conn = new LDAPConnection(LDAPEnv.ladpURL_fort, LDAPEnv.adminName_fort, LDAPEnv.adminPassword_fort, LDAPEnv.authoenSchema);
-        }else{
-            conn = new LDAPConnection(LDAPEnv.ladpURL, LDAPEnv.adminName, LDAPEnv.adminPassword, LDAPEnv.authoenSchema);
-        }
+        LDAPConnection conn = LDAPEnv.getLDAPConnection(fortEnv);
+//        if(fortEnv){
+//            conn = new LDAPConnection(LDAPEnv.ladpURL_fort, LDAPEnv.adminName_fort, LDAPEnv.adminPassword_fort, LDAPEnv.authoenSchema);
+//        }else{
+//            conn = new LDAPConnection(LDAPEnv.ladpURL, LDAPEnv.adminName, LDAPEnv.adminPassword, LDAPEnv.authoenSchema);
+//        }
         try{
             String personBaseDn = getPersonBaseDn(conn, personCn);
             if(personBaseDn != null){

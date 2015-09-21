@@ -13,6 +13,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.fortappend.fortservice.client.vo.OperationEnum;
+
 
 public class FortServiceSocketApi {
 
@@ -119,6 +121,10 @@ class FortServiceApiWorker implements Runnable{
     }
     
     private String[] prepareArguments(String cmd){
+        if(cmd.startsWith("{")){
+            return new String[]{cmd};
+        }
+        
         String[] cmdArr = cmd.split(" ");
         List<String> argList = new ArrayList<String>();
         for(String arg : cmdArr){
@@ -186,6 +192,36 @@ class FortServiceApiWorker implements Runnable{
         
         if(args.length < 1)return "";
         
+        if(args.length == 1 && args[0].startsWith("{")){
+            if(args[0].indexOf(OperationEnum.READ_AUTHORIZATION.getName()) > 0){
+                return Account.listAllAuthorizationAccountForSocket(args[0]);
+            }
+            if(args[0].indexOf(OperationEnum.WRITE_ITIL_AUTHORIZATION.getName()) > 0){
+                return ItilLimit.insertForSocket(args[0]);
+            }
+            if(args[0].indexOf(OperationEnum.GET_ITIL_AUTHORIZATION.getName()) > 0){
+                return ItilLimit.getByPersonAccountForSocket(args[0]);
+            }
+        }
+        
+        if("Config".equals(args[0])){
+            if(args.length == 3){
+                if("itil_filter".equals(args[1])){
+                    return Config.getItilFilter(Boolean.valueOf(args[2]));
+                }
+                if("white_list".equals(args[1])){
+                    return Config.getWhiteList(Boolean.valueOf(args[2]));
+                }
+            }
+            if(args.length == 2){
+                if("itil_filter".equals(args[1])){
+                    return Config.getItilFilter(false);
+                }
+                if("white_list".equals(args[1])){
+                    return Config.getWhiteList(false);
+                }
+            }
+        }
         if("Person".equals(args[0])){
             if(args.length == 3)return ""+Person.authentication(args[1], args[2]);
             if(args.length == 4)return ""+Person.authentication(args[1], args[2], Boolean.parseBoolean(args[3]));
