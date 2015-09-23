@@ -3,10 +3,13 @@ CLASSPATH=`find /usr/local/fort_append/lib/ -name "*.jar" | xargs | sed "s/ /:/g
 export CLASSPATH=.:$CLASSPATH
 export LANG="en_US.UTF-8"
 
+JAVA_HOME=/usr/local/jdk6
+JAVA_EXEC=$JAVA_HOME/bin/java
+
 FortServiceSocketApiPID=`ps -ef | grep FortServiceSocketApi | grep java | awk '{print $2}'`
 
 if [ -z $FortServiceSocketApiPID ] ; then
-  nohup /usr/local/jdk6/bin/java FortServiceSocketApi 5 9777 > /usr/local/fort_append/log/FortServiceSocketApi.log 2>&1 &
+  nohup $JAVA_EXEC FortServiceSocketApi 5 9777 > /usr/local/fort_append/log/FortServiceSocketApi.log 2>&1 &
   echo "FortServiceSocketApi start successfully."
 else
   echo "FortServiceSocketApi process aleady exists, pid="$FortServiceSocketApiPID
