@@ -1,4 +1,5 @@
 # 1=on 0=off
-itil_filter=1
-# format:  account_1,account_2
-white_list=zhangke,zhangping
+itil_filter=0
+
+# Example:  account_1,account_2
+white_list=

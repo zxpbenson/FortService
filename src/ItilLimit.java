@@ -1,4 +1,3 @@
-import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +8,6 @@ import java.util.List;
 //import java.util.concurrent.locks.Lock;
 //import java.util.concurrent.locks.ReadWriteLock;
 //import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.Properties;
 
 import com.fortappend.fortservice.client.vo.FlagEnum;
 import com.fortappend.fortservice.client.vo.ItilResourceVo;
@@ -134,7 +132,11 @@ public class ItilLimit {
             sb.append(vo.getEndDatetime());
             sb.append(";");
         }
-        return sb.toString();
+        String ret = sb.toString();
+        if(ret.length() >= 1){
+            ret = ret.substring(0, ret.length() - 1);
+        }
+        return ret;
     }
     
     public static List<ItilResourceVo> getByPersonAccount(boolean fortEnv, String personAccount){
@@ -178,10 +180,10 @@ public class ItilLimit {
     public static void main(String[] args) {
         ItilResourceVo voInsert = new ItilResourceVo();
         voInsert.setPersonAccount("zhangke");
-        voInsert.setResourceIp("1.1.1.1");
+        voInsert.setResourceIp("192.168.90.66"); //192.168.90.66,root;192.168.82.2,support
         voInsert.setResourceAccount("root");
         voInsert.setStartDatetime("2015-09-20 08:00:00");
-        voInsert.setEndDatetime("2015-09-20 08:10:00");
+        voInsert.setEndDatetime("2015-09-30 08:10:00");
         insert(false, voInsert);
         
         List<ItilResourceVo> list = getByPersonAccount(false, "zhangke");

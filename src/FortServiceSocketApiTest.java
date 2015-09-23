@@ -24,21 +24,21 @@ public class FortServiceSocketApiTest {
     }
     
     public FortServiceSocketApiTest(){
-        this(5, "192.168.10.129", 9777);
+        this(5, "127.0.0.1", 9777);
     }
     
     public void startTest(int limit, String bArg){
         String[] cmds = new String[]{
-                "Asset Asset_002A5D869 root " + bArg,
-                "Person zhangke 123 " + bArg,
-                "Authorization zhangke Asset_1351712111964296 support " + bArg,
-                "Authorization get zhangke 13165170732686 - - " + bArg,
-                "Role zhangke Asset_0031B20A8 " + bArg,
+                //"Asset Asset_002A5D869 root " + bArg,
+                //"Person zhangke 123 " + bArg,
+                //"Authorization zhangke Asset_1351712111964296 support " + bArg,
+                //"Authorization get zhangke 13165170732686 - - " + bArg,
+                //"Role zhangke Asset_0031B20A8 " + bArg,
                 //"Cmd " + bArg,
-                "{\"personAccount\":\"zhangke\",\"operation\":\"readAuthorization\",\"fortEnv\":\"false\"}",
-                "{\"personAccount\":\"zhangke\",\"operation\":\"getItilAuthorization\",\"fortEnv\":\"true\"}",
-                "Config white_list true",
-                "Config itil_filter true"
+                //"{\"personAccount\":\"zhangke\",\"operation\":\"readAuthorization\",\"fortEnv\":\"false\"}",
+                "{\"personAccount\":\"zhangke\",\"operation\":\"getItilAuthorization\",\"fortEnv\":\"false\"}",
+                "Config white_list false",
+                "Config itil_filter false"
                 //""
         };
         
@@ -57,7 +57,7 @@ public class FortServiceSocketApiTest {
         String ip = args.length > 1 ? args[1] : "192.168.10.129";
         int port = args.length > 2 ? Integer.valueOf(args[2]) : 9777;
         
-        int limit = args.length > 0 ? Integer.valueOf(args[0]) : 100;
+        int limit = args.length > 0 ? Integer.valueOf(args[0]) : 3;
         String bArg = args.length > 1 ? args[1] : "";
         
         FortServiceSocketApiTest fortServiceSocketApiTest = null;

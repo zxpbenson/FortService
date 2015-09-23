@@ -6,5 +6,5 @@ if [ -z $FortServiceSocketApiPID ] ; then
   echo "FortServiceSocketApi process not exists."
 else
   kill $FortServiceSocketApiPID
-  echo "FortServiceSocketApi process stop successfully."
+  echo "FortServiceSocketApi process stop successfully. pid=$FortServiceSocketApiPID"
 fi
