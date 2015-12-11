@@ -53,7 +53,7 @@ public class ItilLimit {
             }
         }
         WriteItilAuthorizationResponseVo response = new WriteItilAuthorizationResponseVo();
-        response.setFlag(FlagEnum.SUCCESS.toString());
+        response.setFlag(FlagEnum.SUCCESS.getName());
         return gson.toJson(response, WriteItilAuthorizationResponseVo.class);
     }
     

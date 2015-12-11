@@ -24,7 +24,7 @@ public class FortServiceSocketApiTest {
     }
     
     public FortServiceSocketApiTest(){
-        this(5, "127.0.0.1", 9777);
+        this(5, "192.168.10.129", 9777);
     }
     
     public void startTest(int limit, String bArg){
@@ -36,9 +36,9 @@ public class FortServiceSocketApiTest {
                 //"Role zhangke Asset_0031B20A8 " + bArg,
                 //"Cmd " + bArg,
                 //"{\"personAccount\":\"zhangke\",\"operation\":\"readAuthorization\",\"fortEnv\":\"false\"}",
-                "{\"personAccount\":\"zhangke\",\"operation\":\"getItilAuthorization\",\"fortEnv\":\"false\"}",
-                "Config white_list false",
-                "Config itil_filter false"
+                "{\"personAccount\":\"zhangke\",\"operation\":\"getItilAuthorization\",\"fortEnv\":\"true\"}",
+                "Config white_list true",
+                "Config itil_filter true"
                 //""
         };
         

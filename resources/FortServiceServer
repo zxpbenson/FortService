@@ -1,8 +1,10 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          Sefarious
-# Required-Start:    $all
-# Required-Stop:     $all
+# Required-Start:    $network $local_fs $remote_fs
+# Required-Stop:     $network $local_fs $remote_fs
+# Should-Start:      $all
+# Should-Stop:       $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: FortServiceSocketApi
@@ -17,6 +19,10 @@ stop_fort_service(){
 status_fort_service(){
     /usr/local/fort_append/bin/StatusFortService
 }
+#restart_fort_service(){
+#    /usr/local/fort_append/bin/StopFortService
+#    /usr/local/fort_append/bin/StartFortService
+#}
 
 case $1 in
 start)
@@ -28,6 +34,9 @@ stop)
 status)
     status_fort_service
 ;;
+#restart)
+#    restart_fort_service
+#;;
 *)
     echo 'Usage:FortServiceServer start|stop|status'
 ;;
